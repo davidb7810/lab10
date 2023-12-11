@@ -20,6 +20,7 @@ public class LAB10 {
                 return;
             }
 
+
             if (input.equals("square")) {
                 double a;
                 System.out.println("Enter the length of side a: ");
@@ -120,27 +121,64 @@ public class LAB10 {
         if(num2 == 1) {
             System.out.println("January");
         } else if (num2 == 2) {
-            System.out.println("February");
+            if(num>28)
+            {
+                System.out.println("Invalid day");
+            }
+            else
+            {
+                System.out.println("February");
+            }
         } else if (num2 == 3) {
             System.out.println("March");
         } else if (num2 == 4) {
+            if(num==31)
+            {
+                System.out.println("Invalid day");
+            }
+            else {
             System.out.println("April");
+            }
         } else if (num2 == 5) {
             System.out.println("May");
         } else if (num2 == 6) {
+            if(num==31)
+            {
+                System.out.println("Invalid day");
+            }
+            else {
             System.out.println("June");
+            }
         } else if (num2 == 7) {
             System.out.println("July");
         } else if (num2 == 8) {
-            System.out.println("Augst");
+            if(num==31)
+            {
+                System.out.println("Invalid day");
+            }
+            else {
+            System.out.println("August");
+            }
         } else if (num2 == 9) {
             System.out.println("September");
         } else if (num2 == 10) {
-            System.out.println("October");
+            if(num==31)
+            {
+                System.out.println("Invalid day");
+            }
+            else {
+                System.out.println("October");
+            }
         } else if (num2 == 11) {
             System.out.println("November");
         } else if (num2 == 12) {
+            if(num==31)
+            {
+                System.out.println("Invalid day");
+            }
+            else {
             System.out.println("December");
+            }
         } else {
             System.out.println("Invalid month");
         }
@@ -173,63 +211,73 @@ public static void Q3() {
     }
 
     public static void Q4() {
-        Random rng = new Random();
+        Random random = new Random();
 
-        String next;
+        String userInput;
         System.out.println("Q4: Let's play a game. Type \"A\" to attack, \"B\" to buff your next attack. Kill the enemy to win!");
         System.out.println("Q4: You must roll higher than the enemy armor class (12) to hit. Roll 20 for a critical hit!");
         System.out.println("Q4: Your damage is 2-16 (2d8)");
 
         int enemyHP = 100;
-        int a = 0;
+        int turns = 0;
 
-        boolean check = false;
+        boolean isBuffed = false;
+
         while (true) {
-
             boolean doAttack = false;
-            boolean check2 = false;
-            while (!check2) {
-                next = scan.nextLine();
-                check2 = true;
-                switch (next) {
-                    case "A", "a":
+            boolean validInput = false;
+
+            while (!validInput) {
+                userInput = scan.nextLine();
+                validInput = true;
+
+                switch (userInput.toLowerCase()) {
+                    case "a":
                         doAttack = true;
                         break;
-                    case "B", "b":
-                        check = true;
+                    case "b":
+                        isBuffed = true;
                         System.out.println("Buffing! +5 to your next attack roll and damage");
                         break;
                     default:
                         System.out.println("Invalid input");
-                        check2 = false;
+                        validInput = false;
                 }
             }
 
             if (doAttack) {
-                a++;
-                int attackRoll = rng.nextInt(20) + 1;
+                turns++;
+                int attackRoll = random.nextInt(20) + 1;
                 int damage = 0;
+
                 System.out.print("You rolled: " + attackRoll);
-                if(check) {
+
+                if (isBuffed) {
                     attackRoll += 5;
                     System.out.print(" + 5 (buff active)\n");
                 } else {
                     System.out.println();
                 }
+
                 if (attackRoll >= 12) {
-                    damage = rng.nextInt(8) + 1;
-                    damage += rng.nextInt(8) + 1;
-                    if(check) {
+                    damage = random.nextInt(8) + 1;
+                    damage += random.nextInt(8) + 1;
+
+                    if (isBuffed) {
                         damage += 5;
                     }
-                    if (attackRoll == 20 || (check && attackRoll == 20 + 5)) {
+
+                    if (attackRoll == 20 || (isBuffed && attackRoll == 20 + 5)) {
                         damage *= 2;
                         System.out.print("Critical hit! ");
                     }
+
                     System.out.print("You dealt " + damage + " damage");
-                    if(check) {
+
+                    if (isBuffed) {
                         System.out.print(" (buffed attack)");
                     }
+
                     enemyHP -= damage;
                     System.out.println("\nEnemy HP: " + Math.max(0, enemyHP));
 
@@ -237,14 +285,13 @@ public static void Q3() {
                     System.out.println("Miss");
                 }
 
-                check = false;
+                isBuffed = false;
+
                 if (enemyHP <= 0) {
-                    System.out.println("Enemy died in " + a + " turns");
-                    scan.close();
+                    System.out.println("Enemy died in " + turns + " turns");
                     return;
                 }
             }
-
         }
     }
 }
